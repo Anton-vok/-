@@ -38,35 +38,55 @@ class NoteBase() {
     fun add(header:String,text:String,date:String){
         notes.add(Note(notes.size+1,header,text,date))
     }
+    fun remakeHeder(id:Int,newHeder:String,date:String){
+        notes[id].remakeHeader(newHeder,date)
+    }
+    fun remakeText(id:Int,newText:String,date:String){
+        notes[id].remakeText(newText,date)
+    }
 }
 
 fun main(){
-    val noteBase = NoteBase()
-    var chto:String
+    var noteBase=NoteBase()
     var i:Int
-    println("add-добавить заметку, red-список всех заметок, rec-прочитать конкретную заметку")
+    var com:String
     while (true){
-        chto=readLine().toString().lowercase()
-        when(chto){
-            "add" -> noteBase.add(readLine().toString(), readLine().toString(), LocalDate.now().toString())
-
-            "red" -> {
-                i=0
-                for (note in noteBase.getAll()){
-                    println(note)
-                    println(i)
-                    println()
-                    i++
-                }
-            }
-
-            "rec" -> {
-                for (note in noteBase.get(readLine()?.toInt() ?:0)){
-                    println(note)
-                }
-            }
-
+        i=0
+        for (note in noteBase.getAll()){
+            println("${i}.${note}")
+            i++
         }
-        println("Ok")
+        println("Выерете что вы хотите сделать")
+        println("add-создать заметку, read-прочитать заметку, red-изменить заметку, что бы выйти введите exit")
+        com=readLine().toString().lowercase()
+        when(com){
+            "add" -> {
+                println("Введите название заметки, а затем в следующей строке текст")
+                noteBase.add(readLine().toString(), readLine().toString(), LocalDate.now().toString())
+            }
+            "read" -> {
+                println("Введите номер заметки")
+                for (text in noteBase.get(readLine()?.toInt() ?:0)){
+                    println(text)
+                }
+            }
+            "red" -> {
+                println("Что вы хотите изменить? Введите heder если заголовок, и text если текст заметки")
+                com=readLine().toString().lowercase()
+                when(com){
+                    "heder" -> {
+                        println("Введите номер заметки, а затем новый заголовок")
+                        noteBase.remakeHeder(readLine()?.toIntOrNull() ?:0, readLine().toString(), LocalDate.now().toString())
+                    }
+                    "text" -> {
+                        println("Введите номер заметки, а затем новый текст")
+                        noteBase.remakeText(readLine()?.toIntOrNull() ?:0, readLine().toString(), LocalDate.now().toString())
+                    }
+                }
+            }
+            "exit" -> {
+                break
+            }
+        }
     }
 }
