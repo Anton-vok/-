@@ -44,6 +44,9 @@ class NoteBase() {
     fun remakeText(id:Int,newText:String,date:String){
         notes[id].remakeText(newText,date)
     }
+    fun del(id:Int){
+        notes.removeAt(id)
+    }
 }
 
 fun main(){
@@ -53,11 +56,11 @@ fun main(){
     while (true){
         i=0
         for (note in noteBase.getAll()){
-            println("${i}.${note}")
+            println("${i}.  ${note}")
             i++
         }
         println("Выерете что вы хотите сделать")
-        println("add-создать заметку, read-прочитать заметку, red-изменить заметку, что бы выйти введите exit")
+        println("add-создать заметку, read-прочитать заметку, red-изменить заметку, rem-удалить заметку, что бы выйти введите exit")
         com=readLine().toString().lowercase()
         when(com){
             "add" -> {
@@ -66,9 +69,10 @@ fun main(){
             }
             "read" -> {
                 println("Введите номер заметки")
-                for (text in noteBase.get(readLine()?.toInt() ?:0)){
+                for (text in noteBase.get(readLine()?.toIntOrNull() ?:0)){
                     println(text)
                 }
+
             }
             "red" -> {
                 println("Что вы хотите изменить? Введите heder если заголовок, и text если текст заметки")
@@ -76,16 +80,20 @@ fun main(){
                 when(com){
                     "heder" -> {
                         println("Введите номер заметки, а затем новый заголовок")
-                        noteBase.remakeHeder(readLine()?.toIntOrNull() ?:0, readLine().toString(), LocalDate.now().toString())
+                        noteBase.remakeHeder(readLine()?.toIntOrNull() ?:0 , readLine().toString(), LocalDate.now().toString())
                     }
                     "text" -> {
-                        println("Введите номер заметки, а затем новый текст")
-                        noteBase.remakeText(readLine()?.toIntOrNull() ?:0, readLine().toString(), LocalDate.now().toString())
+                        println("Введите номер заметки, а затем новый текст.")
+                        noteBase.remakeText(readLine()?.toIntOrNull() ?:0 , readLine().toString(), LocalDate.now().toString())
                     }
                 }
             }
             "exit" -> {
                 break
+            }
+            "rem" -> {
+                println("Введите номер заметки котрую вы хотите удалить.")
+                noteBase.del(readLine()?.toIntOrNull() ?:0 )
             }
         }
     }
